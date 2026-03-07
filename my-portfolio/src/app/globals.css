@@ -1,12 +1,191 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ── Theme tokens ── */
+:root {
+  --bg:           #f8fafc;
+  --bg-alt:       #f1f5f9;
+  --bg-card:      #ffffff;
+  --text:         #0f172a;
+  --text-muted:   #64748b;
+  --border:       #e2e8f0;
+  --nav-bg:       rgba(248,250,252,0.85);
+  --accent:       #2563eb;
+  --accent-light: #dbeafe;
+}
+
+.dark {
+  --bg:           #0a0a0a;
+  --bg-alt:       #111111;
+  --bg-card:      #161616;
+  --text:         #f1f5f9;
+  --text-muted:   #94a3b8;
+  --border:       rgba(255,255,255,0.08);
+  --nav-bg:       rgba(10,10,10,0.85);
+  --accent:       #3b82f6;
+  --accent-light: rgba(59,130,246,0.12);
+}
+
+/* ── Base ── */
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  background-color: red;
-  color: #e5e5e5;
+  background-color: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+}
+
+*, *::before, *::after {
+  transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+}
+
+::selection {
+  background: var(--accent);
+  color: #fff;
+}
+
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+/* ── Reusable classes ── */
+.section-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+
+.section-title {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 3rem;
+  line-height: 1.12;
+}
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent), 0 12px 28px rgba(37,99,235,0.08);
+  transform: translateY(-3px);
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.7rem;
+  font-size: 0.72rem;
+  border-radius: 99px;
+  background: var(--accent-light);
+  color: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+  font-weight: 600;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.7rem 1.5rem;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 0.6rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.btn-primary:hover {
+  opacity: 0.87;
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.7rem 1.5rem;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  border-radius: 0.6rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.btn-outline:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--accent) 0%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.section-alt {
+  background: var(--bg-alt);
+}
+
+/* ── Skull Fire Animations ── */
+@keyframes flame-a {
+  0%,100% { transform: scaleX(1.00) scaleY(1.00) rotate(-1deg); opacity: 0.88; }
+  25%     { transform: scaleX(1.07) scaleY(0.93) rotate( 2deg); opacity: 1;    }
+  50%     { transform: scaleX(0.93) scaleY(1.09) rotate(-3deg); opacity: 0.84; }
+  75%     { transform: scaleX(1.05) scaleY(0.96) rotate( 1deg); opacity: 0.92; }
+}
+
+@keyframes flame-b {
+  0%,100% { transform: scaleX(0.94) scaleY(1.06) rotate( 2deg); opacity: 0.90; }
+  40%     { transform: scaleX(1.09) scaleY(0.91) rotate(-3deg); opacity: 1;    }
+  70%     { transform: scaleX(0.97) scaleY(1.08) rotate( 1deg); opacity: 0.85; }
+}
+
+@keyframes flame-c {
+  0%,100% { transform: scaleX(1.03) scaleY(0.97) rotate(-2deg); opacity: 0.92; }
+  35%     { transform: scaleX(0.95) scaleY(1.07) rotate( 3deg); opacity: 1;    }
+  65%     { transform: scaleX(1.06) scaleY(0.94) rotate(-1deg); opacity: 0.87; }
+}
+
+@keyframes spark-float {
+  0%   { transform: translateY(0px)    scale(1);    opacity: 1; }
+  60%  { transform: translateY(-90px)  scale(0.6);  opacity: 0.7; }
+  100% { transform: translateY(-160px) scale(0.05); opacity: 0; }
+}
+
+@keyframes skull-glow-pulse {
+  0%,100% {
+    filter: drop-shadow(0 0 12px #ff6600)
+            drop-shadow(0 0 28px rgba(255,80,0,0.45))
+            drop-shadow(0 0 55px rgba(255,30,0,0.2));
+  }
+  50% {
+    filter: drop-shadow(0 0 22px #ff8800)
+            drop-shadow(0 0 48px rgba(255,100,0,0.65))
+            drop-shadow(0 0 90px rgba(255,50,0,0.35));
+  }
+}
+
+@keyframes ember-drift {
+  0%   { transform: translateY(0)    translateX(0px)   scale(1);   opacity: 0.9; }
+  50%  { transform: translateY(-60px) translateX(8px)  scale(0.7); opacity: 0.6; }
+  100% { transform: translateY(-130px) translateX(-4px) scale(0.1); opacity: 0; }
+}
+
+@keyframes ground-glow {
+  0%,100% { opacity: 0.5; transform: translateX(-50%) scaleX(1); }
+  50%     { opacity: 0.7; transform: translateX(-50%) scaleX(1.08); }
 }
