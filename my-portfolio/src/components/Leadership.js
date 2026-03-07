@@ -1,24 +1,20 @@
+"use client";
+import ScrollReveal from "./ScrollReveal";
+
 const roles = [
   {
-    title: "President",
-    organization: "Computer Science Student Society",
-    period: "Sep 2023 – Present",
-    description:
-      "Lead a team of 8 executives to organize workshops, hackathons, and networking events for 200+ CS students.",
+    title: "President — Cyber Café Club",
+    organization: "Seneca Student Federation",
+    period: "May 2025 – Present",
+    icon: "🏛️",
+    description: "Lead a technical organization of 260+ members. Coordinate technology workshops and programming events that enhance knowledge of emerging technologies and development practices.",
   },
   {
-    title: "Volunteer Mentor",
-    organization: "Youth Coding Bootcamp",
-    period: "Jan 2023 – Apr 2023",
-    description:
-      "Mentored high school students in Python fundamentals, guiding 15 students through their first projects.",
-  },
-  {
-    title: "Hackathon Participant",
-    organization: "HackThe6ix / Local Hack Day",
-    period: "2022 – 2024",
-    description:
-      "Competed in multiple hackathons, building full-stack prototypes under 24-hour constraints.",
+    title: "Peer Mentor & Technical Guide",
+    organization: "Seneca Works",
+    period: "Aug 2025 – Present",
+    icon: "🎓",
+    description: "Mentor 15+ students on programming languages, data structures, algorithms, and OOP concepts. Provide guidance on coding, debugging, and problem-solving techniques.",
   },
 ];
 
@@ -26,25 +22,25 @@ export default function Leadership() {
   return (
     <section id="leadership" className="py-24 px-6 section-alt">
       <div className="max-w-5xl mx-auto">
-        <p className="section-label">Beyond the code</p>
-        <h2 className="section-title">Leadership &amp; Activities</h2>
-
-        <div className="grid sm:grid-cols-3 gap-6">
-          {roles.map((role) => (
-            <div key={role.title} className="card" style={{ transition: "all 0.2s ease" }}>
-              <h3 className="font-bold mb-1" style={{ color: "var(--text)" }}>
-                {role.title}
-              </h3>
-              <p className="text-sm font-medium mb-1" style={{ color: "var(--accent)" }}>
-                {role.organization}
-              </p>
-              <span className="tag mb-3" style={{ fontSize: "0.65rem" }}>
-                {role.period}
-              </span>
-              <p className="text-sm leading-relaxed mt-3" style={{ color: "var(--text-muted)" }}>
-                {role.description}
-              </p>
-            </div>
+        <ScrollReveal>
+          <p className="section-label">Beyond the code</p>
+          <h2 className="section-title">Leadership &amp; Activities</h2>
+        </ScrollReveal>
+        <div className="grid sm:grid-cols-2 gap-6">
+          {roles.map((role, i) => (
+            <ScrollReveal key={role.title} delay={i * 120}>
+              <div className="card h-full">
+                <div className="flex items-start gap-3 mb-3">
+                  <span className="text-3xl">{role.icon}</span>
+                  <div>
+                    <h3 className="font-bold" style={{ color: "var(--text)" }}>{role.title}</h3>
+                    <p className="text-sm font-medium" style={{ color: "var(--accent)" }}>{role.organization}</p>
+                  </div>
+                </div>
+                <span className="tag mb-4" style={{ fontSize: "0.65rem" }}>{role.period}</span>
+                <p className="text-sm leading-relaxed mt-3" style={{ color: "var(--text-muted)" }}>{role.description}</p>
+              </div>
+            </ScrollReveal>
           ))}
         </div>
       </div>

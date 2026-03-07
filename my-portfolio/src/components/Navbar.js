@@ -19,7 +19,6 @@ export default function Navbar() {
   const [active,   setActive]   = useState("");
   const [scrolled, setScrolled] = useState(false);
 
-  /* Toggle dark / light */
   function toggleTheme() {
     const next = !dark;
     setDark(next);
@@ -27,7 +26,6 @@ export default function Navbar() {
     localStorage.setItem("theme", next ? "dark" : "light");
   }
 
-  /* Track scroll for nav shadow + active section */
   useEffect(() => {
     function onScroll() {
       setScrolled(window.scrollY > 20);
@@ -51,13 +49,10 @@ export default function Navbar() {
       className="fixed top-0 w-full z-50 backdrop-blur-md transition-all duration-300"
     >
       <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-
-        {/* Logo */}
         <a href="#" style={{ color: "var(--text)" }} className="text-xl font-extrabold">
           Avinav<span style={{ color: "var(--accent)" }}>.</span>
         </a>
 
-        {/* Desktop links */}
         <ul className="hidden md:flex items-center gap-1">
           {links.map(({ label, href }) => {
             const isActive = active === href.slice(1);
@@ -79,7 +74,6 @@ export default function Navbar() {
           })}
         </ul>
 
-        {/* Theme toggle + hamburger */}
         <div className="flex items-center gap-3">
           <button
             onClick={toggleTheme}
@@ -89,7 +83,6 @@ export default function Navbar() {
           >
             {dark ? "☀️" : "🌙"}
           </button>
-
           <button
             className="md:hidden text-lg font-bold cursor-pointer"
             style={{ color: "var(--text)" }}
@@ -101,7 +94,6 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile menu */}
       {open && (
         <div
           style={{ background: "var(--bg-card)", borderTop: "1px solid var(--border)" }}
