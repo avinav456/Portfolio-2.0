@@ -1,57 +1,130 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-const links = ["About", "Skills", "Experience", "Projects", "Leadership", "Contact"];
+const links = [
+  { label: "About",      href: "#about" },
+  { label: "Skills",     href: "#skills" },
+  { label: "Experience", href: "#experience" },
+  { label: "Projects",   href: "#projects" },
+  { label: "Leadership", href: "#leadership" },
+  { label: "Contact",    href: "#contact" },
+];
 
 export default function Navbar() {
-  const [open, setOpen] = useState(false);
+  const [open,     setOpen]     = useState(false);
+  const [dark,     setDark]     = useState(() => {
+    if (typeof window === "undefined") return true;
+    return (localStorage.getItem("theme") || "dark") === "dark";
+  });
+  const [active,   setActive]   = useState("");
+  const [scrolled, setScrolled] = useState(false);
+
+  /* Toggle dark / light */
+  function toggleTheme() {
+    const next = !dark;
+    setDark(next);
+    document.documentElement.classList.toggle("dark", next);
+    localStorage.setItem("theme", next ? "dark" : "light");
+  }
+
+  /* Track scroll for nav shadow + active section */
+  useEffect(() => {
+    function onScroll() {
+      setScrolled(window.scrollY > 20);
+      let current = "";
+      for (const { href } of links) {
+        const el = document.getElementById(href.slice(1));
+        if (el && window.scrollY >= el.offsetTop - 110) current = href.slice(1);
+      }
+      setActive(current);
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-black/80 backdrop-blur-md border-b border-white/10">
+    <nav
+      style={{
+        background: scrolled ? "var(--nav-bg)" : "transparent",
+        borderBottom: scrolled ? "1px solid var(--border)" : "1px solid transparent",
+      }}
+      className="fixed top-0 w-full z-50 backdrop-blur-md transition-all duration-300"
+    >
       <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-        <span className="text-xl font-bold text-white">
-          Avinav<span className="text-blue-500">.</span>
-        </span>
 
-        {/* Desktop Links */}
-        <ul className="hidden md:flex gap-8">
-          {links.map((link) => (
-            <li key={link}>
-              <a
-                href={`#${link.toLowerCase()}`}
-                className="text-gray-400 hover:text-white transition-colors duration-200 text-sm"
-              >
-                {link}
-              </a>
-            </li>
-          ))}
+        {/* Logo */}
+        <a href="#" style={{ color: "var(--text)" }} className="text-xl font-extrabold">
+          Avinav<span style={{ color: "var(--accent)" }}>.</span>
+        </a>
+
+        {/* Desktop links */}
+        <ul className="hidden md:flex items-center gap-1">
+          {links.map(({ label, href }) => {
+            const isActive = active === href.slice(1);
+            return (
+              <li key={label}>
+                <a
+                  href={href}
+                  onClick={() => setOpen(false)}
+                  style={{
+                    color: isActive ? "var(--accent)" : "var(--text-muted)",
+                    background: isActive ? "var(--accent-light)" : "transparent",
+                  }}
+                  className="px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-200 hover:opacity-75"
+                >
+                  {label}
+                </a>
+              </li>
+            );
+          })}
         </ul>
 
-        {/* Mobile Menu Button */}
-        <button
-          className="md:hidden text-white text-xl"
-          onClick={() => setOpen(!open)}
-          aria-label="Toggle Menu"
-        >
-          {open ? "✕" : "☰"}
-        </button>
+        {/* Theme toggle + hamburger */}
+        <div className="flex items-center gap-3">
+          <button
+            onClick={toggleTheme}
+            aria-label="Toggle theme"
+            style={{ border: "1px solid var(--border)", background: "var(--bg-card)", color: "var(--text)" }}
+            className="w-9 h-9 rounded-full flex items-center justify-center text-base cursor-pointer hover:opacity-70 transition-opacity"
+          >
+            {dark ? "☀️" : "🌙"}
+          </button>
+
+          <button
+            className="md:hidden text-lg font-bold cursor-pointer"
+            style={{ color: "var(--text)" }}
+            onClick={() => setOpen(!open)}
+            aria-label="Toggle menu"
+          >
+            {open ? "✕" : "☰"}
+          </button>
+        </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile menu */}
       {open && (
-        <ul className="md:hidden bg-black px-6 pb-4 flex flex-col gap-4">
-          {links.map((link) => (
-            <li key={link}>
+        <div
+          style={{ background: "var(--bg-card)", borderTop: "1px solid var(--border)" }}
+          className="md:hidden px-6 py-4 flex flex-col gap-1"
+        >
+          {links.map(({ label, href }) => {
+            const isActive = active === href.slice(1);
+            return (
               <a
-                href={`#${link.toLowerCase()}`}
-                className="text-gray-400 hover:text-white text-sm"
+                key={label}
+                href={href}
                 onClick={() => setOpen(false)}
+                style={{
+                  color: isActive ? "var(--accent)" : "var(--text-muted)",
+                  background: isActive ? "var(--accent-light)" : "transparent",
+                }}
+                className="px-3 py-2.5 rounded-md text-sm font-medium transition-all duration-150"
               >
-                {link}
+                {label}
               </a>
-            </li>
-          ))}
-        </ul>
+            );
+          })}
+        </div>
       )}
     </nav>
   );

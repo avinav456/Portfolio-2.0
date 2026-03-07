@@ -24,25 +24,24 @@ const roles = [
 
 export default function Leadership() {
   return (
-    <section id="leadership" className="py-24 px-6">
+    <section id="leadership" className="py-24 px-6 section-alt">
       <div className="max-w-5xl mx-auto">
-        <p className="text-blue-500 text-sm font-semibold tracking-widest uppercase mb-2">
-          Beyond the code
-        </p>
-        <h2 className="text-3xl md:text-4xl font-bold text-white mb-12">
-          Leadership &amp; Activities
-        </h2>
+        <p className="section-label">Beyond the code</p>
+        <h2 className="section-title">Leadership &amp; Activities</h2>
 
         <div className="grid sm:grid-cols-3 gap-6">
           {roles.map((role) => (
-            <div
-              key={role.title}
-              className="bg-white/5 border border-white/10 rounded-xl p-6 hover:border-blue-500/40 transition-colors duration-200"
-            >
-              <h3 className="text-white font-semibold mb-1">{role.title}</h3>
-              <p className="text-blue-400 text-sm mb-1">{role.organization}</p>
-              <p className="text-gray-600 text-xs mb-3">{role.period}</p>
-              <p className="text-gray-400 text-sm leading-relaxed">
+            <div key={role.title} className="card" style={{ transition: "all 0.2s ease" }}>
+              <h3 className="font-bold mb-1" style={{ color: "var(--text)" }}>
+                {role.title}
+              </h3>
+              <p className="text-sm font-medium mb-1" style={{ color: "var(--accent)" }}>
+                {role.organization}
+              </p>
+              <span className="tag mb-3" style={{ fontSize: "0.65rem" }}>
+                {role.period}
+              </span>
+              <p className="text-sm leading-relaxed mt-3" style={{ color: "var(--text-muted)" }}>
                 {role.description}
               </p>
             </div>
